@@ -22,12 +22,23 @@ module.exports = {
         filename: 'bundle.js'
     },
 
+    resolve: {
+        extensions: [ '.js', '.jsx' ]
+    },
+
     devtool: NODE_ENV === 'development' ? "eval" : 'source-map',
 
     module: {
         rules: [
             {
                 test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            },
+            {
+                test: /\.jsx$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
