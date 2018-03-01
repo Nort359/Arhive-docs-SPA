@@ -1,9 +1,16 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack'),
+      path = require('path'),
+      HtmlWebPackPlugin = require("html-webpack-plugin"),
+      ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 // Глобальная константа, отвечающиая за состояние разработки: ('development' или 'production')
-const STATE = process.env.STATE || 'development';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const extractSass = new ExtractTextPlugin({
+    filename: "styles.css",
+    disable: process.env.NODE_ENV === "development",
+    allChunks: true
+});
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
@@ -15,7 +22,7 @@ module.exports = {
         filename: 'bundle.js'
     },
 
-    devtool: STATE === 'development' ? "eval" : 'source-map',
+    devtool: NODE_ENV === 'development' ? "eval" : 'source-map',
 
     module: {
         rules: [
@@ -33,6 +40,29 @@ module.exports = {
                         loader: "html-loader"
                     }
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: extractSass.extract({
+                    use: [
+                        {
+                            loader: "css-loader",
+                            options: {
+                                sourceMap: true,
+                                data: "$env: " + process.env.NODE_ENV + ";"
+                            }
+                        },
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true,
+                                data: "$env: " + process.env.NODE_ENV + ";"
+                            }
+                        }
+                    ],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
             }
         ]
     },
@@ -49,8 +79,9 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
-            STATE: JSON.stringify(STATE)
-        })
+            NODE_ENV: JSON.stringify(NODE_ENV)
+        }),
+        extractSass
     ],
 
     devServer: {
@@ -64,7 +95,7 @@ module.exports = {
     }
 };
 
-if (STATE === 'production') {
+if (NODE_ENV === 'production') {
     module.exports.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {
