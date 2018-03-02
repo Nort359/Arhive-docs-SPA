@@ -2,7 +2,9 @@ node_modules/
 .idea/
 
 public/bundle.js
+public/bundle.js.map
 public/index.html
 public/styles.css
+public/styles.css.map
 npm-debug.log
 yarn.lock
