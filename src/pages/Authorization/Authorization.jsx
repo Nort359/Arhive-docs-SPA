@@ -1,46 +1,54 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
+import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Form from '../../components/Form';
-import Input from '../../components/Input';
 
-// Styles for button
+// Styles for elements
 const styles = {
+    input: {
+        marginTop: -10
+    },
     button: {
         marginTop: 10,
         marginBottom: 10,
         height: 'auto'
     },
-    overlay: {
+    overlayButton: {
         paddingTop: 10,
         paddingBottom: 10
     }
 };
 
-function Authorization() {
-    return (
-        <Fragment>
-            <Form header={ 'Авторизация' }>
-                <Input hintText={ 'Email...' }
-                       floatText={ 'Введите Email' }
-                />
-                <Input hintText={ 'Пароль...' }
-                       floatText={ 'Введите пароль' }
-                />
+export default class Authorization extends Component {
+    static path = '/authorization';
 
-                <RaisedButton
-                    label="Войти"
-                    primary={ true }
-                    fullWidth={ true }
-                    style={ styles.button }
-                    overlayStyle={ styles.overlay }
-                />
+    render() {
+        return (
+            <Fragment>
+                <Form header={ 'Авторизация' }>
+                    <TextField
+                        hintText={ 'Email...' }
+                        floatingLabelText={ 'Введите Email' }
+                        style={ styles.input }
+                        onChange={ (event, email) => {} }
+                    /><br/>
+                    <TextField
+                        hintText={ 'Пароль...' }
+                        floatingLabelText={ 'Введите пароль' }
+                        style={ styles.input }
+                    /><br/>
 
-            </Form>
-        </Fragment>
-    );
+                    <RaisedButton
+                        label="Войти"
+                        primary={ true }
+                        fullWidth={ true }
+                        style={ styles.button }
+                        overlayStyle={ styles.overlayButton }
+                    />
+
+                </Form>
+            </Fragment>
+        );
+    }
 }
-
-Authorization.path = '/authorization';
-
-export default Authorization;
