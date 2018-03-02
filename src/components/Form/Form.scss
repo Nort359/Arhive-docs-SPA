@@ -1,0 +1,14 @@
+@import "../../scss_partian/config";
+
+.form-section {
+  margin: auto;
+  box-shadow: 1px 1px 1px 1px $borderColor;
+  border-top: 5px solid $mainColor;
+  padding: 10px 30px;
+
+  &__head {
+    color: $mainColor;
+  }
+}
+
+

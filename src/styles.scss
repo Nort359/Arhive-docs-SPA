@@ -1,6 +1,8 @@
+@import "scss_partian/config";
+
 body {
   font-family: 'Roboto', sans-serif;
-  font-size: 18px;
+  font-size: $fontSize;
   padding: 0;
   margin: 0;
   min-height: 100vh;
@@ -10,4 +12,11 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.content {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  flex-grow: 1;
+  display: flex;
 }

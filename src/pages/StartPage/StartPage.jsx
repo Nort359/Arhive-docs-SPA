@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 
+import './StartPage.scss';
+
 function StartPage() {
     return (
         <Fragment>
-            <h1>StartPage</h1>
+            <h1 className={ 'startPage' }>StartPage</h1>
         </Fragment>
     );
 }

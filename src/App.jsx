@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 
 // Import pages
 import StartPage from "./pages/StartPage";
+import Authorization from "./pages/Authorization";
 
 // Main component of application
 class App extends Component {
@@ -22,11 +23,15 @@ class App extends Component {
                 <Fragment>
                     <Header />
 
+                    <div className="content">
                         <Switch>
                             <Route exact component={ StartPage } path={ StartPage.path } />
+                            <Route exact component={ Authorization } path={ Authorization.path } />
                         </Switch>
+                    </div>
 
-                    <Footer />
+                    <Footer startPagePath={ StartPage.path }
+                            authorizationPath={ Authorization.path } />
                 </Fragment>
             </BrowserRouter>
         );
