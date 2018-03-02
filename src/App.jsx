@@ -1,10 +1,14 @@
 // Import necessary libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // Import components
 import Header from './components/Header';
-import CenterScreenBlock from './components/CenterScreenBlock';
+import Footer from './components/Footer';
+
+// Import pages
+import StartPage from "./pages/StartPage";
 
 // Main component of application
 class App extends Component {
@@ -14,11 +18,17 @@ class App extends Component {
 
     render() {
         return (
-            <Fragment>
-                <Header />
-                <h1>React app</h1>
-                <CenterScreenBlock>gjghj</CenterScreenBlock>
-            </Fragment>
+            <BrowserRouter>
+                <Fragment>
+                    <Header />
+
+                        <Switch>
+                            <Route exact component={ StartPage } path={ StartPage.path } />
+                        </Switch>
+
+                    <Footer />
+                </Fragment>
+            </BrowserRouter>
         );
     }
 }

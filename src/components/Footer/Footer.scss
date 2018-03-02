@@ -1,0 +1,27 @@
+@import "../../scss_partian/config";
+
+.footer {
+  border-top: 1px solid lighten($darkColor, 20%);
+  background-color: $darkColor;
+  color: $whiteColor;
+  padding: 10px 60px;
+  margin-top: auto;
+
+  &__link {
+    color: $whiteColor;
+    text-decoration: none;
+    transition: all .15s ease-in;
+
+    &:hover {
+      color: $mainColor;
+    }
+  }
+
+  &__copyright {
+    background-color: darken($darkColor, 10%);
+    display: block;
+    color: $whiteColor;
+    padding: 10px 60px;
+    font-size: 14px;
+  }
+}
