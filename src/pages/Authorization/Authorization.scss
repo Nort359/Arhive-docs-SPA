@@ -1,0 +1,14 @@
+@import "../../scss_partian/config";
+
+.authorization {
+  &__links {
+    &_link {
+      color: $mainColor;
+      text-decoration: none;
+      font-style: italic;
+      font-size: $fontSizeSmall;
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}

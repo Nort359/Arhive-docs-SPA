@@ -1,9 +1,18 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
+
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Form from '../../components/Form';
 import Input from '../../components/Input';
+
+// Imports actions
+import { getUser } from './actions';
+
+// Import paths to another pages
+import { paths } from '../../routes';
 
 // Imports data for inputs
 import { inputsData } from './inputsData';
@@ -25,8 +34,9 @@ const styles = {
         paddingBottom: 10
     }
 };
+import './Authorization.scss';
 
-export default class Authorization extends Component {
+class Authorization extends Component {
     static path = '/authorization';
 
     constructor(props) {
@@ -45,6 +55,10 @@ export default class Authorization extends Component {
         this.handleBlurEmail = this.handleBlurEmail.bind(this);
     }
 
+    /**
+     * Метод обработчик события click по кнопке ВОЙТИ
+     * @returns {boolean} — false если одно из полей пустое
+     */
     handleAuthorization() {
         let errors = { email: '', password: '' };
 
@@ -53,18 +67,19 @@ export default class Authorization extends Component {
 
         if (errors.email || errors.password) {
             this.setState({ errors });
-
             return false;
         }
 
-        console.log('Email: ', this.state.email);
-        console.log('Password: ', this.state.password);
-
-        this.setState({ errors });
+        this.setState({ errors }); // Обновляем state. Ошибок нет.
+        this.props.getUser(this.state.email); // Отправляем action. Получаем пользователя
     }
 
-    handleBlurEmail() {
-        const pattern = inputsData.email.patternOk; // Регулярное выражение для проверки ввода email
+    /**
+     * Метод обработчик события blur с поля email
+     * @param pattern — Регулярное выражение для проверки ввода email
+     * @returns {boolean} — false если email был введён неверно
+     */
+    handleBlurEmail(pattern) {
         let errors = { email: '' }; // Объект ошибок ввода email
 
         if (!pattern.test(this.state.email)) { // Если ввод пользователя не прошёл проверку
@@ -86,7 +101,9 @@ export default class Authorization extends Component {
             <Fragment>
                 <Form header={ 'Авторизация' }>
 
-                    <Input icon={ email.icon }>
+                    <Input icon={ email.icon }
+                           lift={ this.state.errors.email !== '' }
+                    >
                         <TextField /* Input Email */
                             hintText={ email.hintText }
                             floatingLabelText={ email.floatText }
@@ -94,13 +111,15 @@ export default class Authorization extends Component {
                             type={ email.type }
                             value={ this.state.email }
                             errorText={ this.state.errors.email }
-                            onBlur={ this.handleBlurEmail }
+                            onBlur={ () => this.handleBlurEmail(email.patternOk) }
                             onChange={ (event, email) => this.setState({ email }) }
                         />
                     </Input><br/>
 
 
-                    <Input icon={ password.icon }>
+                    <Input icon={ password.icon }
+                           lift={ this.state.errors.password !== '' }
+                    >
                         <TextField /* Input Пароль */
                             hintText={ password.hintText }
                             floatingLabelText={ password.floatText }
@@ -122,8 +141,29 @@ export default class Authorization extends Component {
                         onClick={ this.handleAuthorization }
                     />
 
+                    <div className={ 'authorization__links' }>
+                        <Link to={ paths.startPage } className={ 'authorization__links_link' }>Ещё не зарегестрированы?</Link>
+                        <Link to={ paths.startPage } className={ 'authorization__links_link' }>На стартовую страницу</Link>
+                    </div>
+
                 </Form>
             </Fragment>
         );
     }
 }
+
+// First method for connect method
+const mapStateToProps = state => {
+    return {
+        test: state
+    };
+};
+
+// Second method for connect method
+const mapDispatchToProps = dispatch => {
+    return {
+        getUser: email => dispatch(getUser(email))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Authorization);

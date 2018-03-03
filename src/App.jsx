@@ -1,7 +1,9 @@
 // Import necessary libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import { paths, routes } from './routes';
 
 // Import components
 import Header from './components/Header';
@@ -24,14 +26,11 @@ class App extends Component {
                     <Header />
 
                     <div className="content">
-                        <Switch>
-                            <Route exact component={ StartPage } path={ StartPage.path } />
-                            <Route exact component={ Authorization } path={ Authorization.path } />
-                        </Switch>
+                        { routes }
                     </div>
 
-                    <Footer startPagePath={ StartPage.path }
-                            authorizationPath={ Authorization.path } />
+                    <Footer startPagePath={ paths.startPage }
+                            authorizationPath={ paths.authorization } />
                 </Fragment>
             </BrowserRouter>
         );
