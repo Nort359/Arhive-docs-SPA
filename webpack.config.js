@@ -3,6 +3,8 @@ const webpack = require('webpack'),
       HtmlWebPackPlugin = require("html-webpack-plugin"),
       ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 // Глобальная константа, отвечающиая за состояние разработки: ('development' или 'production')
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -92,7 +94,11 @@ module.exports = {
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(NODE_ENV)
         }),
-        extractSass
+
+        extractSass/*,
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
+        })*/
     ],
 
     devServer: {

@@ -5,11 +5,9 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { blue400 } from 'material-ui/styles/colors';
+import { lightBlue500 } from 'material-ui/styles/colors';
 
 class Login extends Component {
-    static muiName = 'FlatButton';
-
     render() {
         return (
             <FlatButton {...this.props} label="Login" />
@@ -48,7 +46,7 @@ class Header extends Component {
             <div>
                 <AppBar
                     title="Архив документов"
-                    style={ { background: blue400 } }
+                    style={ { background: lightBlue500 } }
                     iconElementRight={this.state.logged ? <Logged /> : <Login />}
                 />
             </div>

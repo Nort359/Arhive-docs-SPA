@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Form from '../../components/Form';
@@ -17,42 +16,32 @@ import { paths } from '../../routes';
 // Imports data for inputs
 import { inputsData } from './inputsData';
 
-// Styles for elements
-const styles = {
-    // For inputs
-    input: {
-        marginTop: -10
-    },
-    // For buttons
-    button: {
-        marginTop: 10,
-        marginBottom: 10,
-        height: 'auto'
-    },
-    overlayButton: {
-        paddingTop: 10,
-        paddingBottom: 10
-    }
-};
+// Import styles
 import './Authorization.scss';
+import { styles } from './styles';
 
 class Authorization extends Component {
     static path = '/authorization';
+
+    _inputs = {
+        email: '',
+        password: ''
+    };
+
+    _inputErrors = Object.assign({}, this._inputs);
 
     constructor(props) {
         super(props);
 
         this.state = {
-            email: '',
-            password: '',
+            ...this._inputs,
             errors: {
-                email: '',
-                password: ''
+                ...this._inputErrors
             }
         };
 
         this.handleAuthorization = this.handleAuthorization.bind(this);
-        this.handleBlurEmail = this.handleBlurEmail.bind(this);
+        this.handleBlurInput = this.handleBlurInput.bind(this);
     }
 
     /**
@@ -75,22 +64,26 @@ class Authorization extends Component {
     }
 
     /**
-     * Метод обработчик события blur с поля email
-     * @param pattern — Регулярное выражение для проверки ввода email
-     * @returns {boolean} — false если email был введён неверно
+     * Метод обработчик события blur на объекте input
+     * @param {object} input — объект input, который нужно проверять
+     * @param {boolean} condition — Условие, по которому нужно проверять объект input
+     * @returns {function} — Замыкание, для удобной передачи аргументов в компоненте
      */
-    handleBlurEmail(pattern) {
-        let errors = { email: '' }; // Объект ошибок ввода email
+    handleBlurInput(input, condition = false) {
+        return () => {
+            const errors = this._inputErrors; // Объект ошибок ввода input. Безопасное копирование объекта
 
-        if (!pattern.test(this.state.email)) { // Если ввод пользователя не прошёл проверку
-            errors.email = 'Email введён некоректно'; // Добавляем ошибку
+            if (condition) { // Если ввод пользователя не прошёл проверку
+                errors[input.stateName] = input.messageError; // Добавляем ошибку
 
-            this.setState({ errors }); // Обновляем state
-            return false; // Выходим из метода
+                this.setState({ errors }); // Обновляем state
+                return false; // Выходим из метода
+            }
+
+            errors[input.stateName] = '';
+
+            this.setState({ errors }); // Обновляем state. Ошибок нет.
         }
-
-        this.setState({ errors }); // Обновляем state. Ошибок нет.
-
     }
 
 
@@ -101,48 +94,35 @@ class Authorization extends Component {
             <Fragment>
                 <Form header={ 'Авторизация' }>
 
-                    <Input icon={ email.icon }
-                           lift={ this.state.errors.email !== '' }
-                    >
-                        <TextField /* Input Email */
-                            hintText={ email.hintText }
-                            floatingLabelText={ email.floatText }
-                            style={ styles.input }
-                            type={ email.type }
-                            value={ this.state.email }
-                            errorText={ this.state.errors.email }
-                            onBlur={ () => this.handleBlurEmail(email.patternOk) }
-                            onChange={ (event, email) => this.setState({ email }) }
-                        />
-                    </Input><br/>
+                    <Input floatText={ email.floatText }
+                           hintText={ email.hintText }
+                           icon={ email.icon }
+                           value={ this.state.email }
+                           onChange={ (event, email) => this.setState({ email }) }
+                           onBlur={ this.handleBlurInput(email) }
+                           errorText={ this.state.errors.email }
+                    />
 
+                    <Input floatText={ password.floatText }
+                           hintText={ password.hintText }
+                           style={ styles.input }
+                           type={ password.type }
+                           value={ this.state.password }
+                           errorText={ this.state.errors.password }
+                           onChange={ (event, password) => this.setState({ password }) }
+                    />
 
-                    <Input icon={ password.icon }
-                           lift={ this.state.errors.password !== '' }
-                    >
-                        <TextField /* Input Пароль */
-                            hintText={ password.hintText }
-                            floatingLabelText={ password.floatText }
-                            style={ styles.input }
-                            type={ password.type }
-                            value={ this.state.password }
-                            errorText={ this.state.errors.password }
-                            onChange={ (event, password) => this.setState({ password }) }
-                        />
-                    </Input><br/>
-
-                    <RaisedButton /* Кнопка Войти */
-                        label="Войти"
-                        primary={ true }
+                    <RaisedButton label="Войти" /* Кнопка Войти */
+                                  primary={ true }
+                                  fullWidth={ true }
+                                  style={ styles.button }
+                                  overlayStyle={ styles.overlayButton }
+                                  onClick={ this.handleAuthorization }
                         // TODO change backgroundColor of this button
-                        fullWidth={ true }
-                        style={ styles.button }
-                        overlayStyle={ styles.overlayButton }
-                        onClick={ this.handleAuthorization }
                     />
 
                     <div className={ 'authorization__links' }>
-                        <Link to={ paths.startPage } className={ 'authorization__links_link' }>Ещё не зарегестрированы?</Link>
+                        <Link to={ paths.registration } className={ 'authorization__links_link' }>Ещё не зарегестрированы?</Link>
                         <Link to={ paths.startPage } className={ 'authorization__links_link' }>На стартовую страницу</Link>
                     </div>
 
